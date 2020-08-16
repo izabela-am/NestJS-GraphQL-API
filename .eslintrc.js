@@ -1,24 +1,48 @@
 module.exports = {
+  env: {
+    es2020: true,
+    node: true,
+  },
+  extends: [
+    'airbnb-base',
+    'airbnb-base',
+    'plugin:@typescript-eslint/recommended',
+    'prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.json',
+    ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
+  plugins: [
+    '@typescript-eslint',
     'prettier',
-    'prettier/@typescript-eslint',
   ],
-  root: true,
-  env: {
-    node: true,
-    jest: true,
-  },
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error', {
+        argsIgnorePattern: '_',
+      },
+    ],
+    camelcase: 'off',
+    'no-useless-constructor': 'off',
+    'class-methods-use-this': 'off',
+    'no-shadow': 'off',
+    'no-param-reassign': 'off',
+    'import/no-unresolved': 'off',
+    'prettier/prettier': 'error',
+	   	'import/extensions': [
+	      'error',
+	      'ignorePackages',
+	      {
+	        ts: 'never',
+	      },
+	    ],
+  },
+  settings: {
+    'import/resolver': {
+      typescript: {},
+    },
   },
 };
