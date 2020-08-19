@@ -1,6 +1,7 @@
-const path = require('path');
+import path from 'path';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 
-const config = {
+const ormConfig: TypeOrmModuleOptions = {
   type: 'sqlite',
   database: 'data/database.db',
   logging: true,
@@ -8,4 +9,4 @@ const config = {
   migrations: [path.resolve(__dirname, '..', 'db', 'migrations', '*')]
 };
 
-module.exports = config;
+export default ormConfig;
