@@ -29,4 +29,43 @@ export default class MessageResolver {
   public async getMessage(@Args('id') id: number): Promise<Message> {
     return this.repoService.messageRepo.findOne(id);
   }
+
+  @Mutation(() => Message)
+  public async createMessage(@Args('data') input: MessageInput): Promise<Message> {
+    const message = this.repoService.messageRepo.create({
+      userId: input.userId,
+      content: input.content,
+    });
+
+    const response = await this.repoService.messageRepo.save(message);
+    popSub.publish('messageAdded', { messageAdded: message })
+
+    return response;
+  }
+
+
+  @Mutation(() => Message)@Args('data') input: DeleteMessageInput): Promise<Message> {
+    const message = await this.repoService.messageRepo.findOne(input.id);
+
+    if (!message || message.userId !== input.userId)
+      throw new Error(
+        'Message does not exist',
+      );
+
+    const copy = { ...message };
+
+    await this.repoService.messageRepo.remove(message);
+
+    return copy;
+  }
+
+  @Subscription(() => Message)
+  messageAdded() {
+    return pubSub.asyncIterator('messageAdded');
+  }
+
+  @ResolveField(() => User, { name: 'user' })
+  public async getUser(@Parent() parent: Message, @Context() { UserLoader }: typeof context): Promise<User> {
+    return UserLoader.load(parent.userId);
+  }
 }
